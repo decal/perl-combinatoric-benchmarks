@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#
+
+for p in $(find . -type f -iname '*.pl' -print)
+  do for n in $(seq 1 5)
+    do perl "${p}" ${n} >/dev/null
+  done
+done
+
+exit 0

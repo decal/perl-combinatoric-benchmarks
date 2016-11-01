@@ -2,19 +2,29 @@
 
 use strict;
 use warnings;
+use Benchmark;
+
+my $t0 = Benchmark->new();
+
 use Set::Scalar;
 
-my $a = Set::Scalar->new('a'..'z');
-my $b = Set::Scalar->new('a'..'z');
-my $c = Set::Scalar->new('a'..'z');
-my $d = Set::Scalar->new('a'..'z');
-my $e = Set::Scalar->new('a'..'z');
+my @x = qw[];
 
-#my $f = $a->cartesian_product($b);
-my $iter = Set::Scalar->cartesian_product($a, $b, $c, $d, $e);
+for(my $k = 1;$k <= int($ARGV[0]);++$k) {
+  my $s = Set::Scalar->new('a' .. 'z');
+
+  push(@x, $s);
+}
+
+my $iter = Set::Scalar->cartesian_product_iterator(@x);
 
 while(my @list = $iter->()) {
-  process(@list);
+  print "@list\n";
 }
+
+my $t1 = Benchmark->new();
+my $td = timediff( $t1, $t0 );
+
+print(STDERR "$0 $ARGV[0] " . timestr( $td ) . "\n");
 
 exit 0;
